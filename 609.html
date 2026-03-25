@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividade — Aula 1 — O que é um Algoritmo?</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #f0f7ff;
+    --white:     #ffffff;
+    --blue:      #2563eb;
+    --blue-dark: #1e3a8a;
+    --blue-lt:   #dbeafe;
+    --green:     #059669;
+    --green-lt:  #d1fae5;
+    --amber:     #d97706;
+    --amber-lt:  #fef3c7;
+    --red:       #dc2626;
+    --red-lt:    #fee2e2;
+    --text:      #1e293b;
+    --muted:     #64748b;
+    --border:    #bfdbfe;
+    --radius:    14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Baloo 2', cursive;
+    min-height: 100vh;
+    padding: 28px 16px 60px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    max-width: 780px;
+    margin: 0 auto 32px;
+    background: var(--blue-dark);
+    border-radius: 20px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 60px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(245,158,11,.15);
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--amber);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: #fcd34d; }
+  .header p { color: #93c5fd; font-size: 0.9rem; }
+
+  /* ── ALUNO BAR ── */
+  .aluno-bar {
+    max-width: 780px;
+    margin: 0 auto 28px;
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .aluno-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .aluno-field label { font-size: 0.72rem; font-weight: 700; color: var(--blue); letter-spacing: 1px; text-transform: uppercase; }
+  .aluno-field input {
+    border: none;
+    border-bottom: 2px solid var(--border);
+    padding: 4px 2px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: transparent;
+    outline: none;
+    width: 100%;
+    transition: border-color .2s;
+  }
+  .aluno-field input:focus { border-color: var(--blue); }
+
+  /* ── SCORE BAR ── */
+  .score-bar {
+    max-width: 780px;
+    margin: 0 auto 28px;
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .score-label { font-size: 0.8rem; color: var(--muted); font-weight: 600; flex: 1; }
+  .score-num { font-family: 'Fira Code', monospace; font-size: 1.8rem; font-weight: 700; color: var(--blue); }
+  .progress-wrap { flex-basis: 100%; }
+  .progress-track { background: var(--blue-lt); border-radius: 99px; height: 10px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { background: linear-gradient(90deg, var(--blue), var(--green)); height: 100%; border-radius: 99px; width: 0%; transition: width .5s ease; }
+  .reset-btn {
+    background: var(--blue-dark); color: #fff; border: none; border-radius: 10px;
+    padding: 8px 18px; font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; transition: opacity .2s;
+  }
+  .reset-btn:hover { opacity: .85; }
+
+  /* ── QUESTIONS ── */
+  .questions { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+  .card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+    animation: fadeUp .4s ease both;
+  }
+  .card:hover { box-shadow: 0 6px 28px rgba(37,99,235,.1); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(2) { animation-delay: .07s; }
+  .card:nth-child(3) { animation-delay: .14s; }
+  .card:nth-child(4) { animation-delay: .21s; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--blue-lt);
+    border-bottom: 2px solid var(--border);
+  }
+  .q-num {
+    background: var(--blue);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Fira Code', monospace;
+  }
+  .q-title { font-weight: 700; font-size: 0.95rem; color: var(--blue-dark); }
+  .q-pts { margin-left: auto; font-size: 0.75rem; font-weight: 700; color: var(--muted); background: #fff; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); }
+
+  .card-body { padding: 20px 24px; }
+
+  .enunciado { font-size: 0.92rem; color: var(--text); margin-bottom: 16px; line-height: 1.6; }
+  .enunciado strong { color: var(--blue-dark); }
+
+  /* ── Q1 — textarea ── */
+  .resposta-txt {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.9rem;
+    color: var(--text);
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    transition: border-color .2s;
+    background: #fafcff;
+  }
+  .resposta-txt:focus { border-color: var(--blue); }
+  .check-text-btn {
+    margin-top: 10px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 20px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .check-text-btn:hover { background: var(--blue-dark); }
+
+  /* ── Q2 — arrastar ── */
+  .drag-area {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .drag-col { flex: 1; min-width: 200px; }
+  .drag-col h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+
+  .drag-item {
+    background: var(--amber-lt);
+    border: 2px solid #fcd34d;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    cursor: grab;
+    margin-bottom: 8px;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .drag-item:active { cursor: grabbing; }
+  .drag-item.dragging { opacity: .4; transform: scale(.96); }
+  .drag-item .drag-icon { font-size: 1rem; }
+
+  .drop-zone {
+    min-height: 52px;
+    background: #f8faff;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background .15s, border-color .15s;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .drop-zone.over { background: var(--blue-lt); border-color: var(--blue); }
+  .drop-zone .step-num { background: var(--blue); color: #fff; font-weight: 700; font-size: 0.78rem; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Fira Code', monospace; }
+  .drop-zone.filled { border-style: solid; border-color: var(--blue); background: var(--blue-lt); color: var(--text); }
+  .drop-zone.correct-drop { border-color: var(--green); background: var(--green-lt); }
+  .drop-zone.wrong-drop { border-color: var(--red); background: var(--red-lt); }
+
+  .check-drag-btn {
+    background: var(--amber);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 20px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background .2s;
+    width: 100%;
+  }
+  .check-drag-btn:hover { background: #b45309; }
+
+  /* ── Q3 — criar algoritmo ── */
+  .passo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .passo-num {
+    background: var(--blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Fira Code', monospace;
+  }
+  .passo-input {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+    background: #fafcff;
+    transition: border-color .2s;
+  }
+  .passo-input:focus { border-color: var(--blue); }
+  .tarefa-input {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+    background: #fafcff;
+    margin-bottom: 14px;
+    transition: border-color .2s;
+  }
+  .tarefa-input:focus { border-color: var(--blue); }
+
+  /* ── Q4 — múltipla escolha ── */
+  .mc-options { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt {
+    background: #f8faff;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color .15s, background .15s;
+    text-align: left;
+    color: var(--text);
+    width: 100%;
+    font-family: 'Baloo 2', cursive;
+  }
+  .mc-opt:hover { border-color: var(--blue); background: var(--blue-lt); }
+  .mc-opt.correct { border-color: var(--green); background: var(--green-lt); color: var(--green); }
+  .mc-opt.wrong   { border-color: var(--red);   background: var(--red-lt);   color: var(--red); }
+  .mc-opt:disabled { cursor: default; }
+  .mc-lbl { font-weight: 800; font-size: 0.82rem; color: var(--amber); min-width: 20px; font-family: 'Fira Code', monospace; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok  { background: var(--green-lt); border: 1px solid var(--green); color: var(--green); }
+  .feedback.err { background: var(--red-lt);   border: 1px solid var(--red);   color: var(--red); }
+  .feedback.info{ background: var(--blue-lt);  border: 1px solid var(--blue);  color: var(--blue-dark); }
+
+  /* ── RESULTADO FINAL ── */
+  .resultado {
+    max-width: 780px;
+    margin: 32px auto 0;
+    background: var(--white);
+    border: 3px solid var(--blue);
+    border-radius: 20px;
+    padding: 28px 32px;
+    text-align: center;
+    display: none;
+  }
+  .resultado.show { display: block; animation: fadeUp .5s ease; }
+  .resultado .nota { font-size: 3.5rem; font-weight: 800; color: var(--blue); font-family: 'Fira Code', monospace; }
+  .resultado .msg  { font-size: 1rem; color: var(--muted); margin-top: 6px; }
+  .resultado .emoji { font-size: 2.5rem; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- CABEÇALHO -->
+<div class="header">
+  <div class="header-badge">EF06CO02 — Aula 1</div>
+  <h1>🤖 O que é um <span>Algoritmo?</span></h1>
+  <p>Instruções Sequenciais — 6º Ano — Computação</p>
+</div>
+
+<!-- DADOS DO ALUNO -->
+<div class="aluno-bar">
+  <div class="aluno-field">
+    <label>Nome</label>
+    <input type="text" id="nome" placeholder="Seu nome completo">
+  </div>
+  <div class="aluno-field" style="max-width:120px">
+    <label>Turma</label>
+    <input type="text" id="turma" placeholder="Ex: 6A">
+  </div>
+  <div class="aluno-field" style="max-width:150px">
+    <label>Data</label>
+    <input type="text" id="data" placeholder="dd/mm/aaaa">
+  </div>
+</div>
+
+<!-- PONTUAÇÃO -->
+<div class="score-bar">
+  <div class="score-label">Pontuação</div>
+  <div class="score-num" id="scoreDisplay">0,0 / 10</div>
+  <button class="reset-btn" onclick="resetAll()">🔄 Recomeçar</button>
+  <div class="progress-wrap">
+    <div style="font-size:.75rem;color:var(--muted);font-weight:600;">Progresso</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</div>
+
+<!-- QUESTÕES -->
+<div class="questions">
+
+  <!-- Q1 -->
+  <div class="card" id="card1">
+    <div class="card-header">
+      <div class="q-num">1</div>
+      <div class="q-title">O que é um algoritmo?</div>
+      <div class="q-pts">2,5 pts</div>
+    </div>
+    <div class="card-body">
+      <p class="enunciado">Com suas <strong>próprias palavras</strong>, explique o que é um algoritmo. Tente dar um exemplo do seu dia a dia.</p>
+      <textarea class="resposta-txt" id="q1resp" placeholder="Escreva sua resposta aqui..."></textarea>
+      <button class="check-text-btn" onclick="checkQ1()">Verificar ✓</button>
+      <div class="feedback" id="fb1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card" id="card2">
+    <div class="card-header">
+      <div class="q-num">2</div>
+      <div class="q-title">Ordene os passos!</div>
+      <div class="q-pts">2,5 pts</div>
+    </div>
+    <div class="card-body">
+      <p class="enunciado">Os passos para fazer um <strong>suco de laranja</strong> estão fora de ordem. Arraste cada passo para a posição correta na sequência.</p>
+      <div class="drag-area">
+        <div class="drag-col">
+          <h4>📦 Passos disponíveis</h4>
+          <div id="source-list">
+            <div class="drag-item" draggable="true" data-id="beba">    <span class="drag-icon">🥤</span> Beba o suco.</div>
+            <div class="drag-item" draggable="true" data-id="corte">   <span class="drag-icon">🔪</span> Corte as laranjas ao meio.</div>
+            <div class="drag-item" draggable="true" data-id="coe">     <span class="drag-icon">🫙</span> Coe o suco em um copo.</div>
+            <div class="drag-item" draggable="true" data-id="pegue">   <span class="drag-icon">🍊</span> Pegue as laranjas.</div>
+            <div class="drag-item" draggable="true" data-id="esprema"> <span class="drag-icon">🫒</span> Esprema as laranjas.</div>
+          </div>
+        </div>
+        <div class="drag-col">
+          <h4>✅ Sequência correta</h4>
+          <div class="drop-zone" data-pos="1"><span class="step-num">1</span><span class="placeholder-txt">Solte aqui...</span></div>
+          <div class="drop-zone" data-pos="2"><span class="step-num">2</span><span class="placeholder-txt">Solte aqui...</span></div>
+          <div class="drop-zone" data-pos="3"><span class="step-num">3</span><span class="placeholder-txt">Solte aqui...</span></div>
+          <div class="drop-zone" data-pos="4"><span class="step-num">4</span><span class="placeholder-txt">Solte aqui...</span></div>
+          <div class="drop-zone" data-pos="5"><span class="step-num">5</span><span class="placeholder-txt">Solte aqui...</span></div>
+        </div>
+      </div>
+      <button class="check-drag-btn" onclick="checkQ2()">Verificar sequência ✓</button>
+      <div class="feedback" id="fb2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="card" id="card3">
+    <div class="card-header">
+      <div class="q-num">3</div>
+      <div class="q-title">Crie seu próprio algoritmo!</div>
+      <div class="q-pts">2,5 pts</div>
+    </div>
+    <div class="card-body">
+      <p class="enunciado">Escolha uma tarefa do seu dia a dia e escreva um algoritmo com <strong>4 passos em ordem</strong>. Pode ser: escovar os dentes, preparar o lanche, jogar um videogame...</p>
+      <input class="tarefa-input" id="q3tarefa" type="text" placeholder="Tarefa escolhida: ex. Preparar o café da manhã">
+      <div class="passo-row"><div class="passo-num">1</div><input class="passo-input" id="p1" type="text" placeholder="Primeiro passo..."></div>
+      <div class="passo-row"><div class="passo-num">2</div><input class="passo-input" id="p2" type="text" placeholder="Segundo passo..."></div>
+      <div class="passo-row"><div class="passo-num">3</div><input class="passo-input" id="p3" type="text" placeholder="Terceiro passo..."></div>
+      <div class="passo-row"><div class="passo-num">4</div><input class="passo-input" id="p4" type="text" placeholder="Quarto passo..."></div>
+      <button class="check-text-btn" onclick="checkQ3()">Verificar ✓</button>
+      <div class="feedback" id="fb3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="card" id="card4">
+    <div class="card-header">
+      <div class="q-num">4</div>
+      <div class="q-title">A ordem importa!</div>
+      <div class="q-pts">2,5 pts</div>
+    </div>
+    <div class="card-body">
+      <p class="enunciado">Observe o algoritmo abaixo para <strong>"acordar e ir à escola"</strong>. Um dos passos está <strong>fora do lugar</strong>. Qual seria o problema se executarmos esse algoritmo do jeito que está?</p>
+
+      <div style="background:#f1f5f9;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:18px;font-family:'Fira Code',monospace;font-size:0.85rem;line-height:2;">
+        <div style="color:var(--muted);font-size:.75rem;margin-bottom:6px;font-family:'Baloo 2',cursive;font-weight:700;">ALGORITMO: Acordar e ir à escola</div>
+        <div>1. Acorde.</div>
+        <div>2. Vista o uniforme.</div>
+        <div style="color:var(--red);font-weight:600;">3. Tome banho. ← 🤔</div>
+        <div>4. Tome o café da manhã.</div>
+        <div>5. Vá para a escola.</div>
+      </div>
+
+      <div class="mc-options" id="opts4">
+        <button class="mc-opt" onclick="checkQ4(this,'A','B')"><span class="mc-lbl">A)</span> Nenhum problema — a ordem não importa em algoritmos.</button>
+        <button class="mc-opt" onclick="checkQ4(this,'B','B')"><span class="mc-lbl">B)</span> O aluno vestiria o uniforme antes de tomar banho, sujando ou molhando a roupa.</button>
+        <button class="mc-opt" onclick="checkQ4(this,'C','B')"><span class="mc-lbl">C)</span> O algoritmo ficaria mais rápido por pular etapas.</button>
+        <button class="mc-opt" onclick="checkQ4(this,'D','B')"><span class="mc-lbl">D)</span> O problema é que faltou o passo de escovar os dentes.</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESULTADO FINAL -->
+<div class="resultado" id="resultado">
+  <div class="emoji" id="resEmoji">🎉</div>
+  <div class="nota" id="resNota">10,0</div>
+  <div class="msg" id="resMsg">Parabéns! Você completou a atividade!</div>
+</div>
+
+<script>
+// ── estado ────────────────────────────────────────────────────────────────────
+const TOTAL_QS = 4;
+let scores = { q1: 0, q2: 0, q3: 0, q4: 0 };
+let answered = { q1: false, q2: false, q3: false, q4: false };
+
+function calcNota() {
+  const raw = scores.q1 + scores.q2 + scores.q3 + scores.q4; // 0–4
+  return (raw / TOTAL_QS) * 10;
+}
+
+function updateUI() {
+  const nota = calcNota();
+  const done = Object.values(answered).filter(Boolean).length;
+  document.getElementById('scoreDisplay').textContent = nota.toFixed(1).replace('.', ',') + ' / 10';
+  document.getElementById('progressFill').style.width = `${(done / TOTAL_QS) * 100}%`;
+  if (done === TOTAL_QS) showResultado(nota);
+}
+
+function showResultado(nota) {
+  const el = document.getElementById('resultado');
+  document.getElementById('resNota').textContent = nota.toFixed(1).replace('.', ',');
+  let emoji = '😊', msg = 'Continue praticando!';
+  if (nota >= 9)       { emoji = '🏆'; msg = 'Incrível! Você dominou o conteúdo!'; }
+  else if (nota >= 7)  { emoji = '🎉'; msg = 'Muito bem! Ótimo desempenho!'; }
+  else if (nota >= 5)  { emoji = '👍'; msg = 'Bom trabalho! Revise o que errou.'; }
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resMsg').textContent = msg;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ── Q1 — texto livre ──────────────────────────────────────────────────────────
+function checkQ1() {
+  if (answered.q1) return;
+  const resp = document.getElementById('q1resp').value.trim();
+  const fb   = document.getElementById('fb1');
+  if (resp.length < 20) {
+    fb.textContent = '⚠️ Escreva uma resposta mais completa — pelo menos uma frase explicando o que é um algoritmo!';
+    fb.className = 'feedback show err'; return;
+  }
+  answered.q1 = true;
+  scores.q1 = 1;
+  fb.innerHTML = '✅ Resposta registrada! Lembre: um algoritmo é uma <strong>sequência ordenada de passos</strong> para resolver um problema. Seu professor vai avaliar se você capturou essa ideia!';
+  fb.className = 'feedback show ok';
+  document.getElementById('q1resp').disabled = true;
+  updateUI();
+}
+
+// ── Q2 — drag & drop ─────────────────────────────────────────────────────────
+const CORRECT_ORDER = ['pegue', 'corte', 'esprema', 'coe', 'beba'];
+let dragging = null;
+
+document.querySelectorAll('.drag-item').forEach(item => {
+  item.addEventListener('dragstart', () => { dragging = item; item.classList.add('dragging'); });
+  item.addEventListener('dragend',   () => { item.classList.remove('dragging'); dragging = null; });
+});
+
+document.querySelectorAll('.drop-zone').forEach(zone => {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('over');
+    if (!dragging) return;
+    // se já tem item, devolve ao source
+    const existing = zone.querySelector('.drag-item');
+    if (existing) document.getElementById('source-list').appendChild(existing);
+    zone.appendChild(dragging);
+    zone.classList.add('filled');
+    const ph = zone.querySelector('.placeholder-txt');
+    if (ph) ph.style.display = 'none';
+  });
+});
+
+function checkQ2() {
+  if (answered.q2) return;
+  const zones = document.querySelectorAll('.drop-zone');
+  let allFilled = true, allCorrect = true;
+  zones.forEach((zone, i) => {
+    const item = zone.querySelector('.drag-item');
+    if (!item) { allFilled = false; return; }
+    const id = item.dataset.id;
+    if (id === CORRECT_ORDER[i]) zone.classList.add('correct-drop');
+    else { zone.classList.add('wrong-drop'); allCorrect = false; }
+  });
+  const fb = document.getElementById('fb2');
+  if (!allFilled) {
+    fb.textContent = '⚠️ Coloque todos os 5 passos antes de verificar!';
+    fb.className = 'feedback show err'; return;
+  }
+  answered.q2 = true;
+  document.querySelector('.check-drag-btn').disabled = true;
+  if (allCorrect) {
+    scores.q2 = 1;
+    fb.textContent = '✅ Perfeito! Sequência correta: Pegue → Corte → Esprema → Coe → Beba. Isso é um algoritmo!';
+    fb.className = 'feedback show ok';
+  } else {
+    scores.q2 = 0;
+    fb.textContent = '❌ Alguns passos estão errados. A ordem correta é: 1.Pegue 2.Corte 3.Esprema 4.Coe 5.Beba. Veja os itens em vermelho.';
+    fb.className = 'feedback show err';
+  }
+  updateUI();
+}
+
+// ── Q3 — algoritmo livre ──────────────────────────────────────────────────────
+function checkQ3() {
+  if (answered.q3) return;
+  const tarefa = document.getElementById('q3tarefa').value.trim();
+  const passos = ['p1','p2','p3','p4'].map(id => document.getElementById(id).value.trim());
+  if (!tarefa) {
+    const fb = document.getElementById('fb3');
+    fb.textContent = '⚠️ Escreva o nome da tarefa que você escolheu!';
+    fb.className = 'feedback show err'; return;
+  }
+  const vazios = passos.filter(p => p.length < 3).length;
+  const fb = document.getElementById('fb3');
+  if (vazios > 0) {
+    fb.textContent = '⚠️ Preencha todos os 4 passos! Cada passo deve ter pelo menos uma ação.';
+    fb.className = 'feedback show err'; return;
+  }
+  answered.q3 = true;
+  scores.q3 = 1;
+  fb.innerHTML = `✅ Ótimo! Seu algoritmo para "<strong>${tarefa}</strong>" foi registrado com ${passos.length} passos. Lembre que a <strong>ordem importa</strong> — se você trocar os passos, o resultado muda!`;
+  fb.className = 'feedback show ok';
+  document.getElementById('q3tarefa').disabled = true;
+  ['p1','p2','p3','p4'].forEach(id => document.getElementById(id).disabled = true);
+  updateUI();
+}
+
+// ── Q4 — múltipla escolha ─────────────────────────────────────────────────────
+function checkQ4(btn, chosen, correct) {
+  if (answered.q4) return;
+  answered.q4 = true;
+  document.querySelectorAll('#opts4 .mc-opt').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb4');
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    scores.q4 = 1;
+    fb.innerHTML = '✅ Correto! A ordem dos passos em um algoritmo <strong>sempre importa</strong>. Tomar banho depois de vestir o uniforme estragaria a roupa. Na programação é igual — cada instrução precisa estar no lugar certo!';
+    fb.className = 'feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#opts4 .mc-opt').forEach(b => {
+      if (b.querySelector('.mc-lbl').textContent.startsWith(correct)) b.classList.add('correct');
+    });
+    scores.q4 = 0;
+    fb.textContent = '❌ Não é essa! A resposta certa é B: vestir o uniforme antes do banho causaria um problema real. A ordem dos passos é fundamental em qualquer algoritmo!';
+    fb.className = 'feedback show err';
+  }
+  updateUI();
+}
+
+// ── reset ─────────────────────────────────────────────────────────────────────
+function resetAll() {
+  scores = { q1: 0, q2: 0, q3: 0, q4: 0 };
+  answered = { q1: false, q2: false, q3: false, q4: false };
+
+  // Q1
+  document.getElementById('q1resp').value = '';
+  document.getElementById('q1resp').disabled = false;
+
+  // Q2 — devolver itens ao source
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    const item = zone.querySelector('.drag-item');
+    if (item) document.getElementById('source-list').appendChild(item);
+    zone.classList.remove('filled','correct-drop','wrong-drop');
+    const ph = zone.querySelector('.placeholder-txt');
+    if (ph) ph.style.display = '';
+  });
+  document.querySelector('.check-drag-btn').disabled = false;
+
+  // Q3
+  document.getElementById('q3tarefa').value = '';
+  document.getElementById('q3tarefa').disabled = false;
+  ['p1','p2','p3','p4'].forEach(id => { document.getElementById(id).value = ''; document.getElementById(id).disabled = false; });
+
+  // Q4
+  document.querySelectorAll('#opts4 .mc-opt').forEach(b => { b.disabled = false; b.className = 'mc-opt'; });
+
+  // feedbacks
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.textContent = ''; });
+
+  document.getElementById('resultado').classList.remove('show');
+  updateUI();
+}
+</script>
+</body>
+</html>
